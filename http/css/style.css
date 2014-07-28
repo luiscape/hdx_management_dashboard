@@ -1,0 +1,20 @@
+@font-face {
+  font-family: 'Gotham-Bold';
+  src: url('css/fonts/Gotham-Bold.otf');
+  src: url('css/fonts/Gotham-Bold.otf?#iefix') format('embedded-opentype'),
+}
+
+body, h1, h2, h3, h4, p, table {
+  font-family: 'Gotham';
+}
+
+#chart1 .c3-line {
+  stroke-width: 3px;
+}
+#chart2 .c3-line {
+  stroke-width: 3px;
+}
+
+table {
+	font-size: 11px;
+}
