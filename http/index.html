@@ -221,7 +221,8 @@ function refreshChart() {
 		        	show: false
 		        }
 		    }
-             });
+         });
+		// function to load data dynamically
              setTimeout(function () {
              		d3.json("https://ds-ec2.scraperwiki.com/dnv1xak/6gemw2mellxy2t1/sql?q=select * from Observations Where indID='Number_of_Users'", function(error, json) {
 					if (error) return console.warn(error);
@@ -253,7 +254,8 @@ function refreshChart() {
 						  	}
 			              });
             		 }, 3000);
-	});
+			        });
+			 });
 };
 
 </script>
