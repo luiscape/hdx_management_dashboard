@@ -55,40 +55,34 @@
         <div class="row">
           <section class=''>
             <section>
-              <h4>Current version: Gaza (v0.1)</h4>
-                <p>Developed by <a href="http://www.github.com/luiscape">@luiscape</a> and <a href="http://www.github.com/takavarasha">@takavarasha</a></p>	
+              <h4>CKAN Indicators</h4>
+                <p>Developed by <a href="http://www.github.com/luiscape">@luiscape</a> and <a href="http://www.github.com/takavarasha">@takavarasha</a></p>
             </section>
             <section>
             	<div class="twelve columns">
             	<h2><strong>Timelines</strong> (indicator values for a single country for all dates)</h2>
             	<p>Cross-Appeal: Amount Requested (Original) in <i>Afghanistan</i> | <strong>CHD.O.FUN.01.T6</strong></p>
             	<hr />
-            		<div id="timeseries"></div>
+            		<div id="n_datasets"></div>
             	</div>
             </section>
             <section>
-            	<div class="twelve columns">
-            	<h2><strong>Timelines</strong> (indicator values for a single country for all dates)</h2>
-            	<p>Cross-Appeal: Amount Requested (Original) in <i>Afghanistan</i> | <strong>CHD.O.FUN.01.T6</strong></p>
-            	<hr />
-            		<div id="bars"></div>
-            	</div>
             </section>
           </section>
 
         </div>
 
         <footer>
-
+        	<p>Developed by <a href="http://www.github.com/luiscape">@luiscape</a> and <a href="http://www.github.com/takavarasha">@takavarasha</a></p>
         </footer>
 </div>
 </section>
 </body>
 <style>
-#timeseries .c3-line {
+#n_datasets .c3-line {
   stroke-width: 2px;
 }
-#timeseries .c3-legend-item {
+#n_datasets .c3-legend-item {
 font-size: 11px;
 }
 </style>
@@ -100,15 +94,15 @@ font-size: 11px;
 // the data that will be charted.
 	 var data; // a global
 
-	 d3.json("", function(error, json) {
+	 d3.json("https://ds-ec2.scraperwiki.com/dnv1xak/6gemw2mellxy2t1/sql?q=select%20*%20from%20observations%20where%20indID%20=%20%27Number_of_Datasets%27", function(error, json) {
 	   if (error) return console.warn(error);
 	   data = json;
 
 	   var value, period;
-	   value = jsonPath.eval(data, '$.values..value');
-	   period = jsonPath.eval(data, '$.values..period');
+	   value = jsonPath.eval(data, '$.value');
+	   period = jsonPath.eval(data, '$.period');
 
-	   var format = d3.time.format("%Y");
+	   var format = d3.time.format("%Y-%m-%d");
 	   var years = [];
 	   function getDate(element, index, array) {
 	  	 years.push(format.parse(String(element)));
@@ -120,16 +114,20 @@ font-size: 11px;
 	  console.log(period);  // sanity check
 	  console.log(years);  // sanity checka
 
-	  var timeseries = c3.generate({
-	  	bindto: '#timeseries',
+	  var n_datasets = c3.generate({
+	  	bindto: '#n_datasets',
 	  	data: {
 	  		x: 'year',
 	  		// x_format: '%Y',
 	  		json: {
 		  		year: years,
-	      		Afghanistan: value
+	      		n_datasets: value
 	  		},
-	  		type: 'line'
+	  		type: 'line',
+	  		names: {
+	  			year: 'Date',
+	  			n_datasets: 'Number of Datasets in CKAN'
+	  		}
 	  	},
 	  	bar: {
 	  		width: {
@@ -140,7 +138,7 @@ font-size: 11px;
 	        x: {
 	          type: 'timeseries',
 	          tick: {
-	          	format: '%Y'
+	          	format: '%Y-%m-%d'
 	          }
 	        },
 	        y: {
