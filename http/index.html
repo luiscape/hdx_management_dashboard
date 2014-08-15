@@ -171,6 +171,7 @@ $.getJSON(apiURL, function( data ) {
 
 function refreshChart() {
 	var selectedIndicator = document.getElementById("indicators_dropdown").value
+	var indicatorName = document.getElementById("indicators_dropdown").text
 	d3.json("https://ds-ec2.scraperwiki.com/dnv1xak/6gemw2mellxy2t1/sql?q=select * from Observations Where indID='" + selectedIndicator + "'", function(error, json) {
 		if (error) return console.warn(error);
 		data = json;
@@ -198,7 +199,7 @@ function refreshChart() {
 		  		type: 'line',
 		  		names: {
 		  			year: 'Date',
-		  			n_datasets: 'Number of Datasets in CKAN'
+		  			n_datasets: indicatorName
 		  		}
 		  	},
 		  	bar: {
@@ -220,7 +221,11 @@ function refreshChart() {
         });
 	});
 };
-
-
+</script>
+<script>
+function loadNewData() {
+	chart.load({
+    });
+}
 </script>
 </html>
