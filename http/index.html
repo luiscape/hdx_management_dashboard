@@ -170,10 +170,11 @@ $.getJSON(apiURL, function( data ) {
 });
 
 function refreshChart() {
-	var selectedIndicator = document.getElementById("indicators_dropdown").value;
-	var indicatorText = document.getElementById("indicators_dropdown").text;
+	var indicatorsDropDown = document.getElementById("indicators_dropdown")
+	var selectedIndicator = indicatorsDropDown.value;
+	var indicatorText = indicatorsDropDown.options[indicatorsDropDown.selectedIndex].text;
 	console.log(indicatorText);
-	var indicatorName = document.getElementById("indicators_dropdown").name;
+	var indicatorName = document.getElementById("indicators_dropdown").options[];
 	console.log(indicatorName);
 	console.log(String(indicatorName));
 	d3.json("https://ds-ec2.scraperwiki.com/dnv1xak/6gemw2mellxy2t1/sql?q=select * from Observations Where indID='" + selectedIndicator + "'", function(error, json) {
@@ -225,6 +226,7 @@ function refreshChart() {
         });
 	});
 };
+
 </script>
 <script>
 function loadNewData() {
