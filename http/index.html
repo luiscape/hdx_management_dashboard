@@ -237,8 +237,8 @@ function refreshChart() {
 					   years1.push(format.parse(String(element)));
 					}
 					period1.forEach(getDate);
-			              n_datasets.load({
-				              data: {
+					// c3 function to add data dynamically
+			             n_datasets.load({
 						  		x: 'year',
 						  		// x_format: '%Y',
 						  		json: {
@@ -250,7 +250,6 @@ function refreshChart() {
 						  			year: 'Date',
 						  			n_datasets: 'Number of Users'
 						  		}
-						  	}
 			              });
             		 }, 3000);
 			        });
