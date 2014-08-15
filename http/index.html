@@ -158,10 +158,14 @@ font-size: 11px;
 
 var apiURL = "https://ds-ec2.scraperwiki.com/dnv1xak/6gemw2mellxy2t1/sql?q=Select * From Indicators";
 $.getJSON(apiURL, function( data ) {
-  $.each( data, function( i, item ) {
-  	console.log(item.name);
-  	 $( "<option>" ).attr( "value", item.name ).appendTo( "#indicators_dropdown" );
-  });
+  for(var i = 0; i < data.length; i++) {
+    var indicator = data[i];
+	var option = document.createElement("option");
+	option.text = indicator["name"];
+	option.value = indicator["indID"];
+	document.getElementById("indicators_dropdown").appendChild(option);
+    	console.log(indicator);
+   };
 });
 </script>
 </html>
