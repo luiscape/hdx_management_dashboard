@@ -239,17 +239,9 @@ function refreshChart() {
 					period1.forEach(getDate);
 					// c3 function to add data dynamically
 			             n_datasets.load({
-						  		x: 'year',
 						  		// x_format: '%Y',
-						  		json: {
-							  		year: years1,
-						      		n_datasets: value1
-						  		},
-						  		type: 'line',
-						  		names: {
-						  			year: 'Date',
-						  			n_datasets: 'Number of Users'
-						  		}
+						  		columns:[ value1 ],
+						  		type: 'line'
 			              });
             		 }, 3000);
 			        });
