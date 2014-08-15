@@ -60,6 +60,12 @@
             	<div class="twelve columns">
             	<h2><strong>Timelines</strong> (indicator values for a single country for all dates)</h2>
             	<p>Cross-Appeal: Amount Requested (Original) in <i>Afghanistan</i> | <strong>CHD.O.FUN.01.T6</strong></p>
+            	<div id="indicators_select">
+            		<form action="">
+            			<select name="indicators_dropdown">
+				</select>
+            		</form>
+            	</div>
             	<hr />
             		<div id="n_datasets"></div>
             	</div>
@@ -145,5 +151,14 @@ font-size: 11px;
 	    }
       });
 	});
+</script>
+
+<script>
+var apiURL = "https://ds-ec2.scraperwiki.com/dnv1xak/6gemw2mellxy2t1/sql?q=Select * From Indicators";
+$.getJSON( apiURL, function( data ) {
+  $.each( data.items, function( i, item ) {
+  	 $( "<option>" ).attr( "value", item.name ).appendTo( "#indicators_select" );
+  });
+});
 </script>
 </html>
