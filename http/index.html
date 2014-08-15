@@ -185,38 +185,40 @@ function refreshChart() {
 		   years.push(format.parse(String(element)));
 		}
 		period.forEach(getDate);
-		
+
 		var n_datasets = c3.generate({
-	  	bindto: '#n_datasets',
-	  	data: {
-	  		x: 'year',
-	  		// x_format: '%Y',
-	  		json: {
-		  		year: years,
-	      		n_datasets: value
-	  		},
-	  		type: 'line',
-	  		names: {
-	  			year: 'Date',
-	  			n_datasets: 'Number of Datasets in CKAN'
-	  		}
-	  	},
-	  	bar: {
-	  		width: {
-	  			ratio: 0.99
-	  		}
-	  	},
-	  	axis: {
-	        x: {
-	          type: 'timeseries',
-	          tick: {
-	          	format: '%Y-%m-%d'
-	          }
-	        },
-	        y: {
-	        	show: false
-	        }
-	    });
+		  	bindto: '#n_datasets',
+		  	data: {
+		  		x: 'year',
+		  		// x_format: '%Y',
+		  		json: {
+			  		year: years,
+		      		n_datasets: value
+		  		},
+		  		type: 'line',
+		  		names: {
+		  			year: 'Date',
+		  			n_datasets: 'Number of Datasets in CKAN'
+		  		}
+		  	},
+		  	bar: {
+		  		width: {
+		  			ratio: 0.99
+		  		}
+		  	},
+		  	axis: {
+		        x: {
+		          type: 'timeseries',
+		          tick: {
+		          	format: '%Y-%m-%d'
+		          }
+		        },
+		        y: {
+		        	show: false
+		        }
+		    }
+        });
+	});
 };
 
 
