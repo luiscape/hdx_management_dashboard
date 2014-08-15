@@ -169,4 +169,56 @@ $.getJSON(apiURL, function( data ) {
    };
 });
 </script>
+function refreshChart() {
+	var selectedIndicator = document.getElementById("indicators_dropdown").value
+	d3.json("https://ds-ec2.scraperwiki.com/dnv1xak/6gemw2mellxy2t1/sql?q=select * from Observations Where indID='" + selectedIndicator + "'", function(error, json) {
+		if (error) return console.warn(error);
+		data = json;
+		
+		var value, period;
+		value = jsonPath.eval(data, '$..value');
+		period = jsonPath.eval(data, '$..period');
+		
+		var format = d3.time.format("%Y-%m-%d");
+		var years = [];
+		function getDate(element, index, array) {
+		   years.push(format.parse(String(element)));
+		}
+		period.forEach(getDate);
+		
+		var n_datasets = c3.generate({
+	  	bindto: '#n_datasets',
+	  	data: {
+	  		x: 'year',
+	  		// x_format: '%Y',
+	  		json: {
+		  		year: years,
+	      		n_datasets: value
+	  		},
+	  		type: 'line',
+	  		names: {
+	  			year: 'Date',
+	  			n_datasets: 'Number of Datasets in CKAN'
+	  		}
+	  	},
+	  	bar: {
+	  		width: {
+	  			ratio: 0.99
+	  		}
+	  	},
+	  	axis: {
+	        x: {
+	          type: 'timeseries',
+	          tick: {
+	          	format: '%Y-%m-%d'
+	          }
+	        },
+	        y: {
+	        	show: false
+	        }
+	    }
+}
+<script>
+
+</script>
 </html>
