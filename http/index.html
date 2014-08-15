@@ -115,9 +115,9 @@ font-size: 11px;
 	   period.forEach(getDate);
 
 	  console.log('The following 3 arrays are the: values, periods pre parsing, and periods post parsing into date objects. These will be used to make the timeline chart.');
-	  console.log(value);  // sanity check
-	  console.log(period);  // sanity check
-	  console.log(years);  // sanity checka
+	  // console.log(value);  // sanity check
+	  // console.log(period);  // sanity check
+	  // console.log(years);  // sanity checka
 
 	  var n_datasets = c3.generate({
 	  	bindto: '#n_datasets',
@@ -165,7 +165,7 @@ $.getJSON(apiURL, function( data ) {
 	option.text = indicator["name"];
 	option.value = indicator["indID"];
 	document.getElementById("indicators_dropdown").appendChild(option);
-    	console.log(indicator);
+    	// console.log(indicator);
    };
 });
 
@@ -222,8 +222,12 @@ function refreshChart() {
 		        }
 		    }
          });
-		// function to load data dynamically
-             setTimeout(function () {
+};
+
+</script>
+<script>
+function loadNewData() {
+			// function to load data dynamically
              		d3.json("https://ds-ec2.scraperwiki.com/dnv1xak/6gemw2mellxy2t1/sql?q=select * from Observations Where indID='Number_of_Users'", function(error, json) {
 					if (error) return console.warn(error);
 
@@ -243,14 +247,7 @@ function refreshChart() {
 						  		columns:[ value1 ],
 						  		type: 'line'
 			              });
-            		 }, 3000);
-			        });
-			 });
-};
-
-</script>
-<script>
-function loadNewData() {
+			 	    });
 };
 </script>
 </html>
