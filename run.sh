@@ -1,1 +1,1 @@
-Rscript twitter/code/analysis.R
+Rscript ckan/code/historical.R
