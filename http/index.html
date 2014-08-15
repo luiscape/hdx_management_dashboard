@@ -153,7 +153,9 @@ font-size: 11px;
 	});
 </script>
 
+<script src="//ajax.googleapis.com/ajax/libs/jquery/1.3/jquery.min.js"></script>
 <script>
+
 var apiURL = "https://ds-ec2.scraperwiki.com/dnv1xak/6gemw2mellxy2t1/sql?q=Select * From Indicators";
 d3.json(apiURL, function( data ) {
   $.each( data.items, function( i, item ) {
