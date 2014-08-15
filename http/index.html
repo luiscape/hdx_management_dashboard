@@ -226,11 +226,10 @@ function refreshChart() {
              setTimeout(function () {
              		d3.json("https://ds-ec2.scraperwiki.com/dnv1xak/6gemw2mellxy2t1/sql?q=select * from Observations Where indID='Number_of_Users'", function(error, json) {
 					if (error) return console.warn(error);
-					data = json;
 
 					var value1, period1;
-					value1 = jsonPath.eval(data, '$..value');
-					period1 = jsonPath.eval(data, '$..period');
+					value1 = jsonPath.eval(json, '$..value');
+					period1 = jsonPath.eval(json, '$..period');
 
 					var format = d3.time.format("%Y-%m-%d");
 					var years1 = [];
