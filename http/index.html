@@ -223,10 +223,36 @@ function refreshChart() {
 		    }
              });
              setTimeout(function () {
-	       n_datasets.load({
-		  url: 'https://ds-ec2.scraperwiki.com/dnv1xak/6gemw2mellxy2t1/sql?q=select%20*%20from%20observations%20where%20indID%20=%20%27Number_of_Users%27',
-	        });
-             }, 3000);
+             		d3.json("https://ds-ec2.scraperwiki.com/dnv1xak/6gemw2mellxy2t1/sql?q=select * from Observations Where indID='Number_of_Users'", function(error, json) {
+					if (error) return console.warn(error);
+					data = json;
+
+					var value1, period1;
+					value1 = jsonPath.eval(data, '$..value');
+					period1 = jsonPath.eval(data, '$..period');
+
+					var format = d3.time.format("%Y-%m-%d");
+					var years1 = [];
+					function getDate(element, index, array) {
+					   years1.push(format.parse(String(element)));
+					}
+					period1.forEach(getDate);
+			              n_datasets.load({
+				              data: {
+						  		x: 'year',
+						  		// x_format: '%Y',
+						  		json: {
+							  		year: years1,
+						      		n_datasets: value1
+						  		},
+						  		type: 'line',
+						  		names: {
+						  			year: 'Date',
+						  			n_datasets: 'Number of Users'
+						  		}
+						  	}
+			              });
+            		 }, 3000);
 	});
 };
 
