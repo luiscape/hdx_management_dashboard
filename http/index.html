@@ -60,6 +60,13 @@
             	<div class="twelve columns">
             	<h2><strong>Timelines</strong> (indicator values for a single country for all dates)</h2>
             	<p>Cross-Appeal: Amount Requested (Original) in <i>Afghanistan</i> | <strong>CHD.O.FUN.01.T6</strong></p>
+            	<div id="indicators_select">
+            		<form action="">
+            			<select id="indicators_dropdown" name="indicators_dropdown" onchange="refreshChart()">
+				</select>
+				<button type="button" onclick="refreshChart()">Refresh Chart</button>
+            		</form>
+            	</div>
             	<hr />
             		<div id="n_datasets"></div>
             	</div>
@@ -107,10 +114,10 @@ font-size: 11px;
 	   }
 	   period.forEach(getDate);
 
-	  console.log('The following 3 arrays are the: values, periods pre parsing, and periods post parsing into date objects. These will be used to make the timeline chart.')
-	  console.log(value);  // sanity check
-	  console.log(period);  // sanity check
-	  console.log(years);  // sanity checka
+	  console.log('The following 3 arrays are the: values, periods pre parsing, and periods post parsing into date objects. These will be used to make the timeline chart.');
+	  // console.log(value);  // sanity check
+	  // console.log(period);  // sanity check
+	  // console.log(years);  // sanity checka
 
 	  var n_datasets = c3.generate({
 	  	bindto: '#n_datasets',
@@ -145,5 +152,102 @@ font-size: 11px;
 	    }
       });
 	});
+</script>
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/1.3/jquery.min.js"></script>
+<script>
+
+var apiURL = "https://ds-ec2.scraperwiki.com/dnv1xak/6gemw2mellxy2t1/sql?q=Select * From Indicators";
+$.getJSON(apiURL, function( data ) {
+  for(var i = 0; i < data.length; i++) {
+    var indicator = data[i];
+	var option = document.createElement("option");
+	option.text = indicator["name"];
+	option.value = indicator["indID"];
+	document.getElementById("indicators_dropdown").appendChild(option);
+    	// console.log(indicator);
+   };
+});
+
+function refreshChart() {
+	var indicatorsDropDown = document.getElementById("indicators_dropdown")
+	var selectedIndicator = indicatorsDropDown.value;
+	var indicatorName = indicatorsDropDown.options[indicatorsDropDown.selectedIndex].text;
+	console.log(indicatorName);
+	console.log(String(indicatorName));
+	d3.json("https://ds-ec2.scraperwiki.com/dnv1xak/6gemw2mellxy2t1/sql?q=select * from Observations Where indID='" + selectedIndicator + "'", function(error, json) {
+		if (error) return console.warn(error);
+		data = json;
+		
+		var value, period;
+		value = jsonPath.eval(data, '$..value');
+		period = jsonPath.eval(data, '$..period');
+		
+		var format = d3.time.format("%Y-%m-%d");
+		var years = [];
+		function getDate(element, index, array) {
+		   years.push(format.parse(String(element)));
+		}
+		period.forEach(getDate);
+
+		var n_datasets = c3.generate({
+		  	bindto: '#n_datasets',
+		  	data: {
+		  		x: 'year',
+		  		// x_format: '%Y',
+		  		json: {
+			  		year: years,
+		      		n_datasets: value
+		  		},
+		  		type: 'line',
+		  		names: {
+		  			year: 'Date',
+		  			n_datasets: indicatorName
+		  		}
+		  	},
+		  	bar: {
+		  		width: {
+		  			ratio: 0.99
+		  		}
+		  	},
+		  	axis: {
+		        x: {
+		          type: 'timeseries',
+		          tick: {
+		          	format: '%Y-%m-%d'
+		          }
+		        },
+		        y: {
+		        	show: false
+		        }
+		    }
+         });
+};
+
+</script>
+<script>
+function loadNewData() {
+			// function to load data dynamically
+             		d3.json("https://ds-ec2.scraperwiki.com/dnv1xak/6gemw2mellxy2t1/sql?q=select * from Observations Where indID='Number_of_Users'", function(error, json) {
+					if (error) return console.warn(error);
+
+					var value1, period1;
+					value1 = jsonPath.eval(json, '$..value');
+					period1 = jsonPath.eval(json, '$..period');
+
+					var format = d3.time.format("%Y-%m-%d");
+					var years1 = [];
+					function getDate(element, index, array) {
+					   years1.push(format.parse(String(element)));
+					}
+					period1.forEach(getDate);
+					// c3 function to add data dynamically
+			             n_datasets.load({
+						  		// x_format: '%Y',
+						  		columns:[ value1 ],
+						  		type: 'line'
+			              });
+			 	    });
+};
 </script>
 </html>
