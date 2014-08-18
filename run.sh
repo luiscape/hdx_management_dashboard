@@ -1,1 +1,1 @@
-Rscript ckan/code/historical.R
+bash google_analytics/run.sh
