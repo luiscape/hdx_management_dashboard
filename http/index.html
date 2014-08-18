@@ -3,20 +3,20 @@
 <head>
   <meta charset="utf-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
-  <title>HDX API Prototype</title>
+  <title>HDX Management Dashboard</title>
 
-  	<!-- Loading Source Sans Pro -->
+  	<!-- Loading Source Sans Pro (font) -->
 	<link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,600" rel="stylesheet" type="text/css" />
 	<link rel='stylesheet' id='SourceSansPro-css'  href='https://fonts.googleapis.com/css?family=Source+Sans+Pro%3A200%2C400&#038;ver=3.9.1' type='text/css' media='all' />
 	<!--[if lt IE 9]><script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
 
-	<!-- Loading C3 + D3 JavaScript -->	
+	<!-- Loading C3 + D3 JavaScript -->
 	<script src="/dnv1xak/6gemw2mellxy2t1/http/js/d3.min.js"></script>
 	<script src='/dnv1xak/6gemw2mellxy2t1/http/js/c3.js'></script>
 	<script src='/dnv1xak/6gemw2mellxy2t1/http/js/jsonpath.js'></script>
 	<link href='/dnv1xak/6gemw2mellxy2t1/http/css/c3.css' rel='stylesheet' />
 
-
+    <!-- Loading style sheets that match our current site -->
 	<link rel='stylesheet' id='bean-css'  href='/dnv1xak/6gemw2mellxy2t1/http/css/framework.css' type='text/css' media='all' />
 	<link rel='stylesheet' id='main-style-css'  href='/dnv1xak/6gemw2mellxy2t1/http/css/style.css' type='text/css' media='all' />
 	<link rel='stylesheet' id='mobile-css'  href='/dnv1xak/6gemw2mellxy2t1/http/css/mobile.css' type='text/css' media='all' />
@@ -76,32 +76,34 @@
         </div>
 
         <footer>
-        	<p>Developed by <a href="http://www.github.com/luiscape">@luiscape</a> and <a href="http://www.github.com/takavarasha">@takavarasha</a></p>
+        	<p style="font-size:10px;">Developed by <a href="http://www.github.com/luiscape">@luiscape</a> and <a href="http://www.github.com/takavarasha">@takavarasha</a></p>
         </footer>
 </div>
 </section>
 </body>
+
 <style>
-#n_datasets .c3-line {
-  stroke-width: 2px;
-}
-#n_datasets .c3-legend-item {
-font-size: 11px;
-}
+/* small styles specific to the charts in the page */
+	#n_datasets .c3-line {
+	  stroke-width: 2px;
+	}
+	#n_datasets .c3-legend-item {
+	font-size: 11px;
+	}
 </style>
 
 <script src="//ajax.googleapis.com/ajax/libs/jquery/1.3/jquery.min.js"></script>
 <script>
-
+// creating simple selctor for choosing what apis to chart
+// this will soon be improved to use selectize.js
 var apiURL = "https://ds-ec2.scraperwiki.com/dnv1xak/6gemw2mellxy2t1/sql?q=Select * From Indicators";
-$.getJSON(apiURL, function( data ) {
+$.getJSON(apiURL, function(data) {
   for(var i = 0; i < data.length; i++) {
     var indicator = data[i];
 	var option = document.createElement("option");
 	option.text = indicator["name"];
 	option.value = indicator["indID"];
 	document.getElementById("indicators_dropdown").appendChild(option);
-    	// console.log(indicator);
    };
 });
 
@@ -110,6 +112,11 @@ function refreshChart() {
     // here we are querying the API and parsing the
     // results into json arrays. those arrays contain
     // the data that will be charted.
+    // in this particular implementation, we pull indicator
+    // data from a speficic api call then make a list.
+    // we use that list to provide the user with the ability
+    // to select what indictors it wants to chart.
+    // this will soon be improved with selectize.js
 	var indicatorsDropDown = document.getElementById("indicators_dropdown");
 	var selectedIndicator = indicatorsDropDown.value;
 	var indicatorName = indicatorsDropDown.options[indicatorsDropDown.selectedIndex].text;
@@ -125,7 +132,7 @@ function refreshChart() {
 
 		var format = d3.time.format("%Y-%m-%d");
 		var years = [];
-		function getDate(element, index, array) {
+		function getDate(element) {
 		   years.push(format.parse(String(element)));
 		}
 		period.forEach(getDate);
@@ -143,11 +150,6 @@ function refreshChart() {
 		  		names: {
 		  			year: 'Date',
 		  			n_datasets: indicatorName
-		  		}
-		  	},
-		  	bar: {
-		  		width: {
-		  			ratio: 0.99
 		  		}
 		  	},
 		  	axis: {

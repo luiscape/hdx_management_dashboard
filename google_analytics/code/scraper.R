@@ -103,6 +103,44 @@ query$Init(start.date = "2014-01-01",
 number_sessions_repo_total <- ga$GetReportData(query)
 
 
+two_weeks <- as.character(as.Date(Sys.time()) - 14)
+
+# Number of Visits to the Repository 
+query$Init(start.date = two_weeks,
+           end.date = as.character(as.Date(Sys.time())),
+           metrics = "ga:visits",
+           table.id = r_profile,
+           access_token=access_token)
+number_visits_repo_total <- ga$GetReportData(query)
+
+# Number of Unique Users to the Repository
+query$Init(start.date = two_weeks,
+           end.date = as.character(as.Date(Sys.time())),
+           metrics = "ga:users",
+           table.id = r_profile,
+           access_token=access_token)
+number_unique_users_repo_total <- ga$GetReportData(query)
+
+# Number of Pageviews to the Repository
+query$Init(start.date = two_weeks,
+           end.date = as.character(as.Date(Sys.time())),
+           metrics = "ga:pageviews",
+           table.id = r_profile,
+           access_token=access_token)
+number_pageviews_repo_total <- ga$GetReportData(query)
+
+# Number of Sessions to the Repository
+query$Init(start.date = two_weeks,
+           end.date = as.character(as.Date(Sys.time())),
+           metrics = "ga:sessions",
+           table.id = r_profile,
+           access_token=access_token)
+number_sessions_repo_total <- ga$GetReportData(query)
+
+
+
+
+
 ######################
 #### Blog Metrics ####
 ######################
@@ -132,6 +170,39 @@ number_pageviews_blog_total <- ga$GetReportData(query)
 
 # Number of Sessions to the Blog
 query$Init(start.date = "2014-01-01",
+           end.date = as.character(as.Date(Sys.time())),
+           metrics = "ga:sessions",
+           table.id = b_profile,
+           access_token=access_token)
+number_sessions_blog_total <- ga$GetReportData(query)
+
+## Collecting bi-weekly numbers
+# Number of Visits to the Blog 
+query$Init(start.date = two_weeks,
+           end.date = as.character(as.Date(Sys.time())),
+           metrics = "ga:visits",
+           table.id = b_profile,
+           access_token=access_token)
+number_visits_blog_total <- ga$GetReportData(query)
+
+# Number of Unique Users to the Blog
+query$Init(start.date = two_weeks,
+           end.date = as.character(as.Date(Sys.time())),
+           metrics = "ga:users",
+           table.id = b_profile,
+           access_token=access_token)
+number_unique_users_blog_total <- ga$GetReportData(query)
+
+# Number of Pageviews to the Blog
+query$Init(start.date = two_weeks,
+           end.date = as.character(as.Date(Sys.time())),
+           metrics = "ga:pageviews",
+           table.id = b_profile,
+           access_token=access_token)
+number_pageviews_blog_total <- ga$GetReportData(query)
+
+# Number of Sessions to the Blog
+query$Init(start.date = two_weeks,
            end.date = as.character(as.Date(Sys.time())),
            metrics = "ga:sessions",
            table.id = b_profile,
