@@ -10,22 +10,28 @@
 	<link rel='stylesheet' id='SourceSansPro-css'  href='https://fonts.googleapis.com/css?family=Source+Sans+Pro%3A200%2C400&#038;ver=3.9.1' type='text/css' media='all' />
 	<!--[if lt IE 9]><script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
 
+	<!-- add this when on ScraperWiki: /dnv1xak/6gemw2mellxy2t1/http -->
+
 	<!-- Loading C3 + D3 JavaScript -->
-	<script src="/dnv1xak/6gemw2mellxy2t1/http/js/d3.min.js"></script>
-	<script src='/dnv1xak/6gemw2mellxy2t1/http/js/c3.js'></script>
-	<script src='/dnv1xak/6gemw2mellxy2t1/http/js/jsonpath.js'></script>
-	<link href='/dnv1xak/6gemw2mellxy2t1/http/css/c3.css' rel='stylesheet' />
+	<script src="/js/d3.min.js"></script>
+	<script src='/js/c3.js'></script>
+	<link href='/css/c3.css' rel='stylesheet' />
+
+	<!-- Loading jquery and child dependencies -->
+	<script type='text/javascript' src='/js/jquery.min.js'></script>
+	<script type='text/javascript' src='/js/jquery-migrate.min.js'></script>
+	<script src='/js/jsonpath.js'></script>
 
     <!-- Loading style sheets that match our current site -->
-	<link rel='stylesheet' id='bean-css'  href='/dnv1xak/6gemw2mellxy2t1/http/css/framework.css' type='text/css' media='all' />
-	<link rel='stylesheet' id='main-style-css'  href='/dnv1xak/6gemw2mellxy2t1/http/css/style.css' type='text/css' media='all' />
-	<link rel='stylesheet' id='mobile-css'  href='/dnv1xak/6gemw2mellxy2t1/http/css/mobile.css' type='text/css' media='all' />
-	<link rel='stylesheet' id='font-awesome-four-css'  href='/dnv1xak/6gemw2mellxy2t1/http/css/font-awesome.min.css' type='text/css' media='all' />
-	<script type='text/javascript' src='/dnv1xak/6gemw2mellxy2t1/http/js/jquery.js'></script>
-	<script type='text/javascript' src='/dnv1xak/6gemw2mellxy2t1/http/js/jquery-migrate.min.js'></script>
+	<link rel='stylesheet' id='bean-css'  href='/css/framework.css' type='text/css' media='all' />
+	<link rel='stylesheet' id='main-style-css'  href='/css/style.css' type='text/css' media='all' />
+	<link rel='stylesheet' id='mobile-css'  href='/css/mobile.css' type='text/css' media='all' />
+	<link rel='stylesheet' id='font-awesome-four-css'  href='/css/font-awesome.min.css' type='text/css' media='all' />
+
+	<!-- Adding page-specific style -->
 	<style type="text/css" id="custom-background-css">
 		body.custom-background {
-			/* background-image: url('http://docs.hdx.rwlabs.org/wp-content/uploads/worldmap.png'); */
+			background-image: url('http://docs.hdx.rwlabs.org/wp-content/uploads/worldmap.png');
 			background-color: #fff;
 			background-repeat: no-repeat;
 			background-position: top center;
@@ -34,7 +40,7 @@
 		.archive div#main,
 		.blog div#main-container {
 			float: none;
-			padding-top: 250px;
+			padding-top: 100px;
 			padding-left: 100px;
 			padding-bottom: 100px;
 			padding-right: 100px;
@@ -50,19 +56,226 @@
 <body class="archive category category-blog category-12 custom-background chrome group-blog">
 <section id='main-container' class="BlogFrontPage clear animated BeanFadeIn">
 <div id="main" class="eleven columns" role="main">
+		<!-- Top navigation panel -->
+        <div class="row" style="padding-bottom: 40px;">
+          <div class="twelve columns">
+	          <div class="eight columns left">
+	              <h1>HDX Management Dashboard</h1>
+	          </div>
+	          <div class="two columns right">
+	          	  <span><a class="more-link" type="button" onclick="refreshChart()">Refresh Data</a></span>
+	          </div>
+          </div>
+        </div>
+
         <div class="row">
-          <section class=''>
-            <section>
-              <h4>CKAN Indicators</h4>
-            </section>
+        	<div class="twelve columns">
+
+        	  <!-- The top figures at the page header. -->
+        	  <div class="three columns left">
+	              <h2 style="color: #cccccc;"><span id="datasets"></span> datasets</h2>
+	              <h2 style="color: #cccccc;"><span id="regusers"></span> registered users</h2>
+	              <h2 style="color: #cccccc;"><span id="organizations"></span> organizations</h2>
+	          </div>
+
+	          <!-- The top plot with the 3 basic indicators. -->
+	          <div class="nine columns right">
+	          	<div id="topchart"></div>
+        	  </div>
+        </div>
+        <div class="row">
+        	<div id="n_datasets_chart" class="twelve columns">
+        	</div>
+        </div>
+
+        <!-- JavaScript for collecting the figures above -->
+        <script>
+        // simple function to print a single value
+        // to an id.
+        function printData(url, id) {
+	      d3.json(url, function(err, json) {
+			if (err)
+				return console.warn(err);
+			else {
+			// console.log(json[json.length - 1]);
+			  var docid = document.getElementById(id);
+				docid.innerHTML = ('<span>' + json[json.length - 1].value + '</span>');
+			  };
+			});
+        };
+        </script>
+
+        <script>
+        // building parameters to print the latest data.
+        printData("data/datasets.json", "datasets");
+        printData("data/regusers.json", "regusers");
+        printData("data/orgs.json", "organizations");
+
+        </script>
+
+        <style>
+        #topchart .c3-legend-item {
+			font-size: 11px;
+			padding-top: 100px;
+		}
+        </style>
+
+        <script>
+        function topChart() {
+        // defining all the charted dimensions
+
+        // defining global variables.
+        var n_regusers, date_time, n_orgs;
+
+		// date and time
+		d3.json("data/regusers.json", function(error, json) {
+	      if (error) return console.warn(error);
+		  data = jsonPath.eval(json, '$..period');
+
+		  // converting strings to date objects
+		  var format = d3.time.format("%Y-%m-%d");
+		  var date_time = [];
+		  function getDate(element) {
+		     date_time.push(format.parse(String(element)));
+		  };
+		  data.forEach(getDate);
+	        // registered users
+			d3.json("data/regusers.json", function(error, json) {
+		      if (error) return console.warn(error);
+			  n_regusers = jsonPath.eval(json, '$..value');
+				// organizations
+				d3.json("data/orgs.json", function(error, json) {
+			      if (error) return console.warn(error);
+				  n_orgs = jsonPath.eval(json, '$..value');
+
+						var topchart = c3.generate({
+						  	bindto: '#topchart',
+						  	size: {
+						  		height: 200,
+						  	},
+						  	data: {
+						  		x: 'date',
+								json: {
+									date: date_time,
+									users: n_regusers,
+									orgs: n_orgs
+								},
+						  		type: 'area-spline',
+						  		names: {
+						  			date: 'Date',
+						  			orgs: 'Number of Organization in CKAN',
+						  			users: 'Number of Users Registered in CKAN'
+						  		}
+						  	},
+						  	axis: {
+						  		x: {
+						  			show: true,
+		          					type: 'timeseries',
+		          					tick: {
+		          						format: '%b-%d'
+		          						// rotate: 90
+		          					}
+		        				},
+						        y: {
+						        	show: false
+						        }
+						    },
+						    point: {
+						    	show: false
+						    },
+						    legend: {
+						  		position: 'left'
+						  	}
+				         });
+			     	});
+			     });
+			   });
+	    };
+
+	    function datasetChart() {
+	    	var n_datasets, date_time;
+	    	// date and time
+			d3.json("data/regusers.json", function(error, json) {
+				if (error) return console.warn(error);
+				data = jsonPath.eval(json, '$..period');
+
+				// converting strings to date objects
+				var format = d3.time.format("%Y-%m-%d");
+				var date_time = [];
+				function getDate(element) {
+					date_time.push(format.parse(String(element)));
+				};
+		  		data.forEach(getDate);
+
+					// datasets
+					d3.json("data/datasets.json", function(error, json) {
+						if (error) return console.warn(error);
+							n_datasets = jsonPath.eval(json, '$..value');
+
+			    	var n_datasets_chart = c3.generate({
+						  	bindto: '#n_datasets_chart',
+						  	size: {
+						  		height: 240,
+						  	},
+						  	data: {
+						  		x: 'date',
+								json: {
+									date: date_time,
+									datasets: n_datasets
+								},
+						  		type: 'line',
+						  		names: {
+						  			date: 'Date',
+						  			datasets: 'Number of Datasets in CKAN'
+						  		}
+						  	},
+						  	axis: {
+						  		x: {
+		          					type: 'timeseries',
+		          					tick: {
+		          						format: '%Y-%m-%d'
+		          					},
+		        				},
+						        y: {
+						        	show: false,
+						        	max: 1400,
+            						min: -100,
+            						padding: {top:0, bottom:0}
+						        }
+						    },
+						    point: {
+						    	show: true
+						    },
+						    legend: {
+						    	show: false,
+						  		position: 'right'
+						  	}
+				         });
+					});
+					});
+					};
+
+		// running the function
+	    topChart();
+	    datasetChart();
+        </script>
+
+        <script>
+        // function to assemble a single dimension that can be charted
+        // that dimension can be the time, value, or other attributes
+        // of data.
+        function getDimension(url, path) {
+        };
+        </script>
+
+        <div class="row">
             <section>
             	<div class="twelve columns">
             	<h2></p>
             	<div id="indicators_select">
             		<form action="">
-            			<select id="indicators_dropdown" name="indicators_dropdown" onchange="refreshChart()">
-				</select>
-				<button type="button" onclick="refreshChart()">Refresh Chart</button>
+            			<select id="indicators_dropdown" name="indicators_dropdown" onchange="refreshChart()"></select>
+				<a class="more-link" type="button" onclick="refreshChart()">Refresh Chart</a>
             		</form>
             	</div>
             	<hr />
@@ -76,7 +289,7 @@
         </div>
 
         <footer>
-        	<p style="font-size:10px;">Developed by <a href="http://www.github.com/luiscape">@luiscape</a> and <a href="http://www.github.com/takavarasha">@takavarasha</a></p>
+        	<p style="font-size:12px;">Developed by <a href="http://www.github.com/luiscape">@luiscape</a> and <a href="http://www.github.com/takavarasha">@takavarasha</a></p>
         </footer>
 </div>
 </section>
