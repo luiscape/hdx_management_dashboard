@@ -2,3 +2,5 @@ oauth1_signature.R
 .Rproj.user
 auth/*
 auth/**
+.Rhistory
+mailchimp/code/auth.R

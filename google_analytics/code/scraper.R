@@ -1,6 +1,10 @@
 #### Google Analytics script. ####
 
-# loading Google dependencies
+# loading dependency libraries
+library(RCurl)
+library(rjson)
+
+# loading Google Analytics specific dependencies
 source("google_analytics/code/RGoogleAnalytics.R")
 source("google_analytics/code/QueryBuilder.R")
 source("google_analytics/code/Configuration.R")
@@ -19,7 +23,7 @@ ga.account <- conf$GetAccounts()
 
 testConnection <- function() {
     if (nrow(ga.account) != 3) message('There are problems with auth.')
-    else message('Connection established with Google Analytics.\n.')
+    else message('Connection established with Google Analytics.\n')
 }
 testConnection()
 
@@ -43,8 +47,9 @@ ga.profiles <- ga$GetProfileData(access_token)
 
 profile <- ga.webProfile_repo$id[1]  # data for the repository
 
-startdate <- "2014-01-01"
-enddate <- "2014-08-18"
+alltime_start <- "2014-01-01"
+startdate <- as.Date("2014-08-18")
+enddate <- startdate + 14
 
 sort <- "ga:visits"
 maxresults <- 10000
@@ -55,23 +60,11 @@ r_profile <- "ga:85660823"
 b_profile <- "ga:82675519"
 
 
-query$Init(start.date = startdate,
-           end.date = enddate,
-           # dimensions = dimension,
-           metrics = metric,
-           #sort = sort,
-           #filters="",
-           #segment=segment,
-           # max.results = maxresults,
-           table.id = paste("ga:",profile, sep=""),
-           access_token=access_token)
-
-
 ######################
 #### Repo Metrics ####
 ######################
 # Number of Visits to the Repository 
-query$Init(start.date = "2014-01-01",
+query$Init(start.date = alltime_start,
            end.date = as.character(as.Date(Sys.time())),
            metrics = "ga:visits",
            table.id = r_profile,
@@ -79,7 +72,7 @@ query$Init(start.date = "2014-01-01",
 number_visits_repo_total <- ga$GetReportData(query)
 
 # Number of Unique Users to the Repository
-query$Init(start.date = "2014-01-01",
+query$Init(start.date = alltime_start,
            end.date = as.character(as.Date(Sys.time())),
            metrics = "ga:users",
            table.id = r_profile,
@@ -87,7 +80,7 @@ query$Init(start.date = "2014-01-01",
 number_unique_users_repo_total <- ga$GetReportData(query)
 
 # Number of Pageviews to the Repository
-query$Init(start.date = "2014-01-01",
+query$Init(start.date = alltime_start,
            end.date = as.character(as.Date(Sys.time())),
            metrics = "ga:pageviews",
            table.id = r_profile,
@@ -95,7 +88,7 @@ query$Init(start.date = "2014-01-01",
 number_pageviews_repo_total <- ga$GetReportData(query)
 
 # Number of Sessions to the Repository
-query$Init(start.date = "2014-01-01",
+query$Init(start.date = alltime_start,
            end.date = as.character(as.Date(Sys.time())),
            metrics = "ga:sessions",
            table.id = r_profile,
@@ -145,7 +138,7 @@ number_sessions_repo_total <- ga$GetReportData(query)
 #### Blog Metrics ####
 ######################
 # Number of Visits to the Blog 
-query$Init(start.date = "2014-01-01",
+query$Init(start.date = alltime_start,
            end.date = as.character(as.Date(Sys.time())),
            metrics = "ga:visits",
            table.id = b_profile,
@@ -153,7 +146,7 @@ query$Init(start.date = "2014-01-01",
 number_visits_blog_total <- ga$GetReportData(query)
 
 # Number of Unique Users to the Blog
-query$Init(start.date = "2014-01-01",
+query$Init(start.date = alltime_start,
            end.date = as.character(as.Date(Sys.time())),
            metrics = "ga:users",
            table.id = b_profile,
@@ -161,7 +154,7 @@ query$Init(start.date = "2014-01-01",
 number_unique_users_blog_total <- ga$GetReportData(query)
 
 # Number of Pageviews to the Blog
-query$Init(start.date = "2014-01-01",
+query$Init(start.date = alltime_start,
            end.date = as.character(as.Date(Sys.time())),
            metrics = "ga:pageviews",
            table.id = b_profile,
@@ -169,7 +162,7 @@ query$Init(start.date = "2014-01-01",
 number_pageviews_blog_total <- ga$GetReportData(query)
 
 # Number of Sessions to the Blog
-query$Init(start.date = "2014-01-01",
+query$Init(start.date = alltime_start,
            end.date = as.character(as.Date(Sys.time())),
            metrics = "ga:sessions",
            table.id = b_profile,
@@ -183,7 +176,7 @@ query$Init(start.date = two_weeks,
            metrics = "ga:visits",
            table.id = b_profile,
            access_token=access_token)
-number_visits_blog_total <- ga$GetReportData(query)
+number_visits_blog_weekly <- ga$GetReportData(query)
 
 # Number of Unique Users to the Blog
 query$Init(start.date = two_weeks,
@@ -191,7 +184,7 @@ query$Init(start.date = two_weeks,
            metrics = "ga:users",
            table.id = b_profile,
            access_token=access_token)
-number_unique_users_blog_total <- ga$GetReportData(query)
+number_unique_users_blog_weekly <- ga$GetReportData(query)
 
 # Number of Pageviews to the Blog
 query$Init(start.date = two_weeks,
@@ -199,7 +192,7 @@ query$Init(start.date = two_weeks,
            metrics = "ga:pageviews",
            table.id = b_profile,
            access_token=access_token)
-number_pageviews_blog_total <- ga$GetReportData(query)
+number_pageviews_blog_weekly <- ga$GetReportData(query)
 
 # Number of Sessions to the Blog
 query$Init(start.date = two_weeks,
@@ -207,7 +200,7 @@ query$Init(start.date = two_weeks,
            metrics = "ga:sessions",
            table.id = b_profile,
            access_token=access_token)
-number_sessions_blog_total <- ga$GetReportData(query)
+number_sessions_blog_weekly <- ga$GetReportData(query)
 
 
 
@@ -221,7 +214,11 @@ observations <- data.frame(period = as.character(as.Date(Sys.time())),
                                      'Number_of_Visits_Blog_Total',
                                      'Number_of_Unique_Users_Blog_Total',
                                      'Number_of_Pageviews_Blog_Total',
-                                     'Number_of_Sessions_Blog_Total'),
+                                     'Number_of_Sessions_Blog_Total',
+                                     'Number_of_Visits_Blog_Weekly',
+                                     'Number_of_Unique_Users_Blog_Weekly',
+                                     'Number_of_Pageviews_Blog_Weekly',
+                                     'Number_of_Sessions_Blog_Weekly'),
                  values = c(as.numeric(number_visits_repo_total), 
                             as.numeric(number_unique_users_repo_total),
                             as.numeric(number_pageviews_repo_total), 
@@ -229,9 +226,15 @@ observations <- data.frame(period = as.character(as.Date(Sys.time())),
                             as.numeric(number_visits_blog_total),
                             as.numeric(number_unique_users_blog_total),
                             as.numeric(number_pageviews_blog_total),
-                            as.numeric(number_sessions_blog_total)))
+                            as.numeric(number_sessions_blog_total),
+                            as.numeric(number_visits_blog_weekly),
+                            as.numeric(number_unique_users_blog_weekly),
+                            as.numeric(number_pageviews_blog_weekly),
+                            as.numeric(number_sessions_blog_weekly)))
 
-writeTables(observations, 'observations', 'scraperwiki')
+## Write tests before storing data. Many errors appear here. ##
+
+writeTables(observations, 'observations', 'google_analytics/data/scraperwiki.sqlite')
 
 
 # Storing the GA indicators

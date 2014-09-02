@@ -1,9 +1,9 @@
 ## Write tables in a db. ##
 library(sqldf)
 
-writeTables <- function(df = NULL, 
+writeTables <- function(df = NULL,
                         table_name = NULL, 
-                        db = NULL, 
+                        db = NULL,
                         testing = FALSE) {
   # sanity check
   if (is.null(df) == TRUE) stop("Don't forget to provide a data.frame.")
@@ -13,7 +13,7 @@ writeTables <- function(df = NULL,
   message('Storing data in a database.')
   
   # creating db
-  db_name <- paste0("twitter/data/", db, ".sqlite")
+  db_name = paste(db, sep = "")
   db <- dbConnect(SQLite(), dbname = db_name)
   
   # check if the table already already exists in the db

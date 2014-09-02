@@ -43,14 +43,14 @@ getFriends <- function() {
 humanitariandata <- getHashtag(date = as.Date('2014-07-14'))
 writeTables(df = humanitariandata, 
             table_name = 'humanitariandata', 
-            db = 'scraperwiki',
+            db = 'twitter/data/scraperwiki.sqlite',
             testing = FALSE)
 
 # friends data
 friends_data <- getFriends()
 writeTables(df = friends_data, 
             table_name = 'friends_data', 
-            db = 'scraperwiki',
+            db = 'twitter/data/scraperwiki.sqlite',
             testing = FALSE)
 
 
