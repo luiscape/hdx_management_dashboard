@@ -55,7 +55,7 @@
 
 <body class="archive category category-blog category-12 custom-background chrome group-blog">
 <section id='main-container' class="BlogFrontPage clear animated BeanFadeIn">
-<div id="main" class="eleven columns" role="main">
+<div id="main" role="main">
 		<!-- Top navigation panel -->
         <div class="row" style="padding-bottom: 40px;">
           <div class="twelve columns">
@@ -68,14 +68,15 @@
           </div>
         </div>
 
+        <!-- Charts -->
         <div class="row">
         	<div class="twelve columns">
-
         	  <!-- The top figures at the page header. -->
         	  <div class="three columns left">
-	              <h2 style="color: #cccccc;"><span id="datasets"></span> datasets</h2>
-	              <h2 style="color: #cccccc;"><span id="regusers"></span> registered users</h2>
-	              <h2 style="color: #cccccc;"><span id="organizations"></span> organizations</h2>
+        	  	  <span style="font-size: 14px; font-weight: 400;">Today we have:</span>
+	              <h2 style="color: #808080;"><span id="datasets" style="color: #000000;"></span> datasets,</h2>
+	              <h2 style="color: #808080;"><span id="regusers" style="color: #000000;"></span> registered users,</h2>
+	              <h2 style="color: #808080;">and <span id="organizations" style="color: #000000;"></span> organizations.</h2>
 	          </div>
 
 	          <!-- The top plot with the 3 basic indicators. -->
@@ -83,7 +84,10 @@
 	          	<div id="topchart"></div>
         	  </div>
         </div>
+
+        <!-- Datasets focus area -->
         <div class="row">
+        	<span style="font-size: 14px; font-weight: 400;">Datasets overview:</span>
         	<div id="n_datasets_chart" class="twelve columns">
         	</div>
         </div>
@@ -117,6 +121,12 @@
         #topchart .c3-legend-item {
 			font-size: 11px;
 			padding-top: 100px;
+		}
+		#topchart .c3-line {
+		  stroke-width: 2px;
+		}
+        #n_datasets_chart .c3-line {
+		  stroke-width: 2px;
 		}
         </style>
 
@@ -160,19 +170,22 @@
 									users: n_regusers,
 									orgs: n_orgs
 								},
-						  		type: 'area-spline',
+						  		type: 'spline',
 						  		names: {
 						  			date: 'Date',
 						  			orgs: 'Number of Organization in CKAN',
 						  			users: 'Number of Users Registered in CKAN'
+						  		},
+						  		selection: {
+						  			enabled: true
 						  		}
 						  	},
 						  	axis: {
 						  		x: {
-						  			show: true,
+						  			show: false,
 		          					type: 'timeseries',
 		          					tick: {
-		          						format: '%b-%d'
+		          						format: '%b %d'
 		          						// rotate: 90
 		          					}
 		        				},
@@ -181,7 +194,7 @@
 						        }
 						    },
 						    point: {
-						    	show: false
+						    	show: true
 						    },
 						    legend: {
 						  		position: 'left'
@@ -359,7 +372,7 @@ function refreshChart() {
 			  		year: years,
 		      		n_datasets: value
 		  		},
-		  		type: 'line',
+		  		type: 'bar',
 		  		names: {
 		  			year: 'Date',
 		  			n_datasets: indicatorName
@@ -369,7 +382,7 @@ function refreshChart() {
 		        x: {
 		          type: 'timeseries',
 		          tick: {
-		          	format: '%Y-%m-%d'
+		          	format: '%m %d'
 		          }
 		        },
 		        y: {
