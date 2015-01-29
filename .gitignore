@@ -4,3 +4,5 @@ auth/*
 auth/**
 .Rhistory
 mailchimp/code/auth.R
+.httr-oauth
+ga-python/a.txt

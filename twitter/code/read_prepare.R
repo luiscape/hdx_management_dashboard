@@ -3,7 +3,7 @@
 
 readPrepare <- function() { 
   # Load Data
-  file_list <- data.frame(list.files('twitter/data/'))
+  file_list <- data.frame(list.files('tool/twitter/data/'))
   
   for (i in 1:nrow(file_list)) {
     

@@ -1,21 +1,47 @@
 ### adding historical timeseries to the dashboard ###
 library(reshape2)
-source('code/write_tables.R')
 
+# ScraperWiki helper library
+onSw <- function(d = T, f = 'tool/ckan/') {
+	if (d) return(f)
+	else return("")
+}
 
-# load data
-data <- read.csv('data/source/hdx_repo_analytics.csv')
+# config
+PATH = paste0(onSw(), 'data/temp.csv')
 
-data_m <- melt(data)
-names(data_m) <- c('period', 'indID', 'value')
-observations <- data_m
+# Loading helper libaries
+source(paste0(onSw(), 'code/write_tables.R'))
+source(paste0(onSw(), 'code/sw_status.R'))
 
-indicators <- data.frame(indID = unique(data_m$indID), name = c('Number of Datasets in CKAN', 'Number of Countries in CKAN', 'Number of Organizations in CKAN', 'Number of Users Registered in CKAN', 'Number of Different Tags in CKAN', 'Number of Licenses in CKAN'), dsID = 'ckan')
+# get data and insert in db
+getAndInsert <- function(p) {
+	# downloading the file from another box
+	download.file(
+	'https://ds-ec2.scraperwiki.com/zaflugd/iokwwtf3ldspuao/cgi-bin/csv/hdx_repo_analytics.csv',
+	destfile=p,
+	method='wget'
+	)
+	# adding data to local database
+	data <- read.csv(p)
+	writeTable(data,'ckan', 'scraperwiki', overwrite=T)  # overwriting the table name if it exists
+}
 
-datasets <- data.frame(dsID = 'ckan', last_scraped = as.character(as.Date(Sys.time())), name = 'CKAN', source = 'https://data.hdx.rwlabs.org/api')
+# ScraperWiki wraper function
+runScraper <- function(p) {
+	getAndInsert(p)
+}
 
+# ScraperWiki-specific error handler
+# Changing the status of SW.
+tryCatch(runScraper(PATH),
+         error = function(e) {
+           cat('Error detected ... sending notification.')
+           system('mail -s "CKAN statistics collection failed." luiscape@gmail.com')
+           changeSwStatus(type = "error", message = "Scraper failed.")
+           { stop("!!") }
+         }
+)
 
-# writing tables in db
-writeTables(indicators, 'indicators', 'scraperwiki')
-writeTables(datasets, 'datasets', 'scraperwiki')
-writeTables(observations, 'observations', 'scraperwiki')
+# If success:
+changeSwStatus(type = 'ok')

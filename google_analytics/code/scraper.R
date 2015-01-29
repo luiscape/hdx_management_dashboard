@@ -1,4 +1,6 @@
 #### Google Analytics script. ####
+# TODO: This script stopped working completely. #
+# Redo it from scratch when ready. #
 
 # loading dependency libraries
 library(RCurl)
@@ -18,9 +20,11 @@ access_token <- query$authorize()
 # Step 2. Initialize the configuration object
 conf <- Configuration()
 
-# Retrieving a list of Accounts
+# Retrieving a list of accounts from Google 
 ga.account <- conf$GetAccounts()
 
+
+# Simple connection test
 testConnection <- function() {
     if (nrow(ga.account) != 3) message('There are problems with auth.')
     else message('Connection established with Google Analytics.\n')
@@ -48,7 +52,7 @@ ga.profiles <- ga$GetProfileData(access_token)
 profile <- ga.webProfile_repo$id[1]  # data for the repository
 
 alltime_start <- "2014-01-01"
-startdate <- as.Date("2014-08-18")
+startdate <- as.Date("2014-09-01")
 enddate <- startdate + 14
 
 sort <- "ga:visits"
@@ -98,13 +102,13 @@ number_sessions_repo_total <- ga$GetReportData(query)
 
 two_weeks <- as.character(as.Date(Sys.time()) - 14)
 
-# Number of Visits to the Repository 
+# Number of Visits to the Repository Bi-weekly 
 query$Init(start.date = two_weeks,
            end.date = as.character(as.Date(Sys.time())),
            metrics = "ga:visits",
            table.id = r_profile,
            access_token=access_token)
-number_visits_repo_total <- ga$GetReportData(query)
+number_visits_repo_biweekly <- ga$GetReportData(query)
 
 # Number of Unique Users to the Repository
 query$Init(start.date = two_weeks,
@@ -112,7 +116,7 @@ query$Init(start.date = two_weeks,
            metrics = "ga:users",
            table.id = r_profile,
            access_token=access_token)
-number_unique_users_repo_total <- ga$GetReportData(query)
+number_unique_users_repo_biweekly <- ga$GetReportData(query)
 
 # Number of Pageviews to the Repository
 query$Init(start.date = two_weeks,
@@ -120,7 +124,7 @@ query$Init(start.date = two_weeks,
            metrics = "ga:pageviews",
            table.id = r_profile,
            access_token=access_token)
-number_pageviews_repo_total <- ga$GetReportData(query)
+number_pageviews_repo_biweekly <- ga$GetReportData(query)
 
 # Number of Sessions to the Repository
 query$Init(start.date = two_weeks,
@@ -128,10 +132,7 @@ query$Init(start.date = two_weeks,
            metrics = "ga:sessions",
            table.id = r_profile,
            access_token=access_token)
-number_sessions_repo_total <- ga$GetReportData(query)
-
-
-
+number_sessions_repo_biweekly <- ga$GetReportData(query)
 
 
 ######################
@@ -176,7 +177,7 @@ query$Init(start.date = two_weeks,
            metrics = "ga:visits",
            table.id = b_profile,
            access_token=access_token)
-number_visits_blog_weekly <- ga$GetReportData(query)
+number_visits_blog_biweekly <- ga$GetReportData(query)
 
 # Number of Unique Users to the Blog
 query$Init(start.date = two_weeks,
@@ -184,7 +185,7 @@ query$Init(start.date = two_weeks,
            metrics = "ga:users",
            table.id = b_profile,
            access_token=access_token)
-number_unique_users_blog_weekly <- ga$GetReportData(query)
+number_unique_users_blog_biweekly <- ga$GetReportData(query)
 
 # Number of Pageviews to the Blog
 query$Init(start.date = two_weeks,
@@ -192,7 +193,7 @@ query$Init(start.date = two_weeks,
            metrics = "ga:pageviews",
            table.id = b_profile,
            access_token=access_token)
-number_pageviews_blog_weekly <- ga$GetReportData(query)
+number_pageviews_blog_biweekly <- ga$GetReportData(query)
 
 # Number of Sessions to the Blog
 query$Init(start.date = two_weeks,
@@ -200,44 +201,60 @@ query$Init(start.date = two_weeks,
            metrics = "ga:sessions",
            table.id = b_profile,
            access_token=access_token)
-number_sessions_blog_weekly <- ga$GetReportData(query)
+number_sessions_blog_biweekly <- ga$GetReportData(query)
 
 
-
+######################
 #### Storing Data ####
+######################
 # Organizing data into the db format.
-observations <- data.frame(period = as.character(as.Date(Sys.time())),
-                           indID = c('Number_of_Visits_Repo_Total', 
-                                     'Number_of_Unique_Users_Repo_Total',
-                                     'Number_of_Pageviews_Repo_Total',
-                                     'Number_of_Sessions_Repo_Total',
-                                     'Number_of_Visits_Blog_Total',
-                                     'Number_of_Unique_Users_Blog_Total',
-                                     'Number_of_Pageviews_Blog_Total',
-                                     'Number_of_Sessions_Blog_Total',
-                                     'Number_of_Visits_Blog_Weekly',
-                                     'Number_of_Unique_Users_Blog_Weekly',
-                                     'Number_of_Pageviews_Blog_Weekly',
-                                     'Number_of_Sessions_Blog_Weekly'),
-                 values = c(as.numeric(number_visits_repo_total), 
-                            as.numeric(number_unique_users_repo_total),
-                            as.numeric(number_pageviews_repo_total), 
-                            as.numeric(number_sessions_repo_total),
-                            as.numeric(number_visits_blog_total),
-                            as.numeric(number_unique_users_blog_total),
-                            as.numeric(number_pageviews_blog_total),
-                            as.numeric(number_sessions_blog_total),
-                            as.numeric(number_visits_blog_weekly),
-                            as.numeric(number_unique_users_blog_weekly),
-                            as.numeric(number_pageviews_blog_weekly),
-                            as.numeric(number_sessions_blog_weekly)))
+
+observations <- data.frame(
+  period = as.character(as.Date(Sys.time())),
+  indID = c('Number_of_Visits_Repo_Total',
+            'Number_of_Unique_Users_Repo_Total',
+            'Number_of_Pageviews_Repo_Total',
+            'Number_of_Sessions_Repo_Total',
+            'Number_of_Visits_Repo_Biweekly',
+            'Number_of_Unique_Users_Repo_Biweekly',
+            'Number_of_Pageviews_Repo_Biweekly',
+            'Number_of_Sessions_Repo_Biweekly',
+            'Number_of_Visits_Blog_Total',
+            'Number_of_Unique_Users_Blog_Total',
+            'Number_of_Pageviews_Blog_Total',
+            'Number_of_Sessions_Blog_Total',
+            'Number_of_Visits_Blog_Biweekly',
+            'Number_of_Unique_Users_Blog_Biweekly',
+            'Number_of_Pageviews_Blog_Biweekly',
+            'Number_of_Sessions_Blog_Biweekly'),
+  values = c(as.numeric(number_visits_repo_total),
+             as.numeric(number_unique_users_repo_total),
+             as.numeric(number_pageviews_repo_total),
+             as.numeric(number_sessions_repo_total),
+             as.numeric(number_visits_repo_biweekly),
+             as.numeric(number_unique_users_repo_biweekly),
+             as.numeric(number_pageviews_repo_biweekly),
+             as.numeric(number_sessions_repo_biweekly),
+             as.numeric(number_visits_blog_total),
+             as.numeric(number_unique_users_blog_total),
+             as.numeric(number_pageviews_blog_total),
+             as.numeric(number_sessions_blog_total),
+             as.numeric(number_visits_blog_biweekly),
+             as.numeric(number_unique_users_blog_biweekly),
+             as.numeric(number_pageviews_blog_biweekly),
+             as.numeric(number_sessions_blog_biweekly))
+  )
 
 ## Write tests before storing data. Many errors appear here. ##
 
 writeTables(observations, 'observations', 'google_analytics/data/scraperwiki.sqlite')
 
 
-# Storing the GA indicators
+########################################
+## Storing the GA indicators into the ##
+## Dashboard database.                ##
+########################################
+
 # indicators <- data.frame(indID = unique(observations$indID), name = c('Number of Visits to the Repository (total)', 'Number of Unique Users to the Repository (total)', 'Number of Pageviews to the Repository (total)', 'Number of Sessions to the Repository (total)', 'Number of Visits to the Blog (total)', 'Number of Unique Users to the Blog (total)', 'Number of Pageviews to the Blog (total)', 'Number of Sessions to the Blog (total)'), dsID = 'google-analytics')
 # writeTables(indicators, 'indicators', 'scraperwiki')
 
@@ -250,3 +267,26 @@ writeTables(observations, 'observations', 'google_analytics/data/scraperwiki.sql
 # DB tests
 # db <- dbConnect(SQLite(), dbname = 'scraperwiki.sqlite')
 #x <- dbReadTable(db, 'datasets')
+
+
+
+
+
+
+# Wrapper function to manage error handling. 
+runScraper <- function() {
+}
+
+## Managing the status on ScraperWiki.
+# If error:
+tryCatch(runScraper(),
+  error = function(e) {
+  cat('Error detected ... sending notification.')
+  system('echo "Google Analytics failed." | mail -s "HDX Dashboard failed." luiscape@gmail.com')
+  changeSwStatus(type = "error", message = "Google Analytics failed.")
+  { stop("!!") }
+ }
+)
+
+## If success:
+changeSwStatus(type = 'ok')
