@@ -22,6 +22,7 @@ source(onSw('code/sw_status.R'))
 args <- commandArgs(T)
 limit = args[1]
 PATH = ""
+db_table_name = "ckan_activity_data"
 
 
 #######################
@@ -132,7 +133,7 @@ reshapeData <- function(df = NULL) {
 ############################################
 
 # Scraper wrapper
-runScraper <- function(csv = FALSE, p = NULL) {
+runScraper <- function(csv = FALSE, p = NULL, table = NULL) {
   cat('-----------------------------\n')
   cat('Collecting current data.\n')
   # collecting data. 25000 gets about everything (?)
@@ -144,7 +145,7 @@ runScraper <- function(csv = FALSE, p = NULL) {
   # there isn't new data. Check if the object is a data.frame
   # and then proceed to writting the data in the database.
   if (is.data.frame(activity_data_totals)) {
-    writeTable(activity_data_totals, 'organization_data', 'scraperwiki')
+    writeTable(activity_data_totals, table, 'scraperwiki')
     m <- paste('Data saved on database.', nrow(activity_data_totals), 'records added.\n')
     cat(m)
   }
@@ -159,7 +160,7 @@ runScraper <- function(csv = FALSE, p = NULL) {
 }
 
 # Changing the status of SW.
-tryCatch(runScraper(TRUE, PATH),
+tryCatch(runScraper(p=PATH, table=db_table_name),
          error = function(e) {
            cat('Error detected ... sending notification.')
            system('mail -s "CKAN Statistics: Activity list failed." luiscape@gmail.com')
