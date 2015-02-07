@@ -4,14 +4,10 @@ library(rjson)
 library(RCurl)
 
 # ScraperWiki helper function
-onSw <- function(p = NULL, d = TRUE, l = 'tool/') {
-  if(d) return(paste0(p,l))
+onSw <- function(p = NULL, d = TRUE, l = 'tool/ckan/') {
+  if(d) return(paste0(l,p))
   else return(p)
 }
-
-# Collect API key from command line.
-args <- commandArgs(T)
-apikey = args[1]
 
 # Loading helper libaries
 source(onSw('code/write_tables.R'))
@@ -22,13 +18,18 @@ source(onSw('code/sw_status.R'))
 ###################
 PATH = onSw('data/organization_data.csv')
 db_table_name = "ckan_organization_data"
+args <- commandArgs(T)
+apikey = args[1]
 
+###################
+## Program Logic ##
+###################
 # Function to fetch related visualizations
 # from HDX.
 fetchOrganizations <- function(key = NULL) {
   cat('Downloading data...\n')
   url = 'https://data.hdx.rwlabs.org/api/action/organization_list'
-  doc = fromJSON(getURL(url, httpheader = c(Authorization = 'a6863277-f35e-4f50-af85-78a2d9ebcdd3')))
+  doc = fromJSON(getURL(url, httpheader = c(Authorization = key)))
   total = length(doc$result)
 
   cat('Assembling data.frame...\n')
@@ -57,9 +58,6 @@ fetchOrganizations <- function(key = NULL) {
   return(out)
 }
 
-# Storing output.
-organization_list <- fetchOrganizations(apikey)
-
 ############################################
 ############################################
 ########### ScraperWiki Logic ##############
@@ -67,17 +65,17 @@ organization_list <- fetchOrganizations(apikey)
 ############################################
 
 # Scraper wrapper
-runScraper <- function(csv = FALSE, p = NULL, table = NULL) {
+runScraper <- function(csv = FALSE, p = NULL, table = NULL, key = NULL) {
   cat('-----------------------------\n')
-  cat('Collecting current data.\n')
-  data <- parseData(args[1])  # add custom date here (run once!)
-  checkData(data)
+
+  data <- fetchOrganizations(key)
+
   # The function parseData returns a string if
   # there isn't new data. Check if the object is a data.frame
   # and then proceed to writting the data in the database.
   if (is.data.frame(data)) {
-    writeTable(data, 'ckan_organization_data', 'scraperwiki')
-    m <- paste('Data saved on database.', nrow(data), 'records added.\n')
+    writeTable(data, table, 'scraperwiki')
+    m <- paste('\nData saved to database.', nrow(data), 'records added.\n')
     cat(m)
   }
   else print(data)
@@ -87,7 +85,7 @@ runScraper <- function(csv = FALSE, p = NULL, table = NULL) {
 }
 
 # Changing the status of SW.
-tryCatch(runScraper(p = PATH, table = db_table_name),
+tryCatch(runScraper(p = PATH, table = db_table_name, key = apikey),
          error = function(e) {
            cat('Error detected ... sending notification.')
            system('mail -s "CKAN Statistics: Organization list failed." luiscape@gmail.com')

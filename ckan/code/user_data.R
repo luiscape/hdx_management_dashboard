@@ -6,7 +6,7 @@ library(RCurl)
 
 # ScraperWiki helper function
 onSw <- function(p = NULL, d = TRUE, l = 'tool/ckan/') {
-  if(d) return(paste0(p,l))
+  if(d) return(paste0(l,p))
   else return(p)
 }
 
@@ -39,7 +39,8 @@ fetchUsers <- function(key = NULL) {
       email = ifelse(is.null(doc$result[[i]]$email), NA, doc$result[[i]]$email),
       sysadmin = doc$result[[i]]$sysadmin,
       number_of_edits = doc$result[[i]]$number_of_edits,
-      id = doc$result[[i]]$id)
+      id = doc$result[[i]]$id,
+      date = as.character(Sys.Date()))
 
     if (i == 1) out <- it
     else out <- rbind(out, it)
@@ -55,16 +56,16 @@ fetchUsers <- function(key = NULL) {
 ############################################
 
 # Scraper wrapper
-runScraper <- function(csv = FALSE, p = NULL, table = NULL) {
+runScraper <- function(csv = FALSE, p = NULL, table = NULL, key = NULL) {
   cat('-----------------------------\n')
   cat('Collecting user data.\n')
-  data <- fetchUsers(apikey)
+  data <- fetchUsers(key)
   # The function parseData returns a string if
   # there isn't new data. Check if the object is a data.frame
   # and then proceed to writting the data in the database.
   if (is.data.frame(data)) {
     writeTable(data, table, 'scraperwiki')
-    m <- paste('Data saved on database.', nrow(data), 'records added.\n')
+    m <- paste('\nData saved to database.', nrow(data), 'records added.\n')
     cat(m)
   }
   else print(data)
@@ -74,7 +75,7 @@ runScraper <- function(csv = FALSE, p = NULL, table = NULL) {
 }
 
 # Changing the status of SW.
-tryCatch(runScraper(p = PATH, table = db_table_name),
+tryCatch(runScraper(p = PATH, table = db_table_name, key = apikey),
          error = function(e) {
            cat('Error detected ... sending notification.')
            system('mail -s "CKAN Statistics: User list failed." luiscape@gmail.com')

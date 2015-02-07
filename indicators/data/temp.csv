@@ -1,0 +1,21 @@
+indid,name,source,description,url,periodicity
+1,Number of Datasets,CKAN,Number number of datasets on CKAN by date. It doesn't include private datasets.,https://data.hdx.rwlabs.org/stats,daily
+2,Number of Organizations,CKAN,Total number of organiations on CKAN by date.,https://data.hdx.rwlabs.org/stats,daily
+3,Number of Registered Users,CKAN,Total number of registered users on CKAN by date.,https://data.hdx.rwlabs.org/stats,daily
+4,Number of Datasets Created,CKAN,Total number of datasets created on CKAN by date.,https://data.hdx.rwlabs.org/stats,daily
+5,Number of Datasets Deleted,CKAN,Total number of datasets deleted on CKAN by date.,https://data.hdx.rwlabs.org/stats,daily
+6,Number of Datasets Edited,CKAN,Total number of datasets edited on CKAN by date.,https://data.hdx.rwlabs.org/stats,daily
+7,Number of Unique Visitors,Google Analytics,Number of unique visitors to the website by period.,https://www.google.com/analytics/web/?hl=en,
+8,Total Number of Events,Google Analytics,"Total events (share, preview, download) by period.",https://www.google.com/analytics/web/?hl=en,
+9,Number of Downloads,Google Analytics,Total number of downloads of resources by period.,https://www.google.com/analytics/web/?hl=en,
+10,Number of Previews,Google Analytics,Total number of previews of resources by period.,https://www.google.com/analytics/web/?hl=en,
+11,Number of Shares,Google Analytics,Total number of shares of resources by period.,https://www.google.com/analytics/web/?hl=en,
+12,Number of Dataset Shares,Google Analytics,Total number of dataset shares by period.,https://www.google.com/analytics/web/?hl=en,
+13,Average Session Duration,Google Analytics,Average session duration by period. ,https://www.google.com/analytics/web/?hl=en,
+14,Total Unique Events,Google Analytics,"Total number of unique events (share, preview, download) by period. ",https://www.google.com/analytics/web/?hl=en,
+15,Number of Unique Downloads,Google Analytics,Total number of unique downloads of resources by period.,https://www.google.com/analytics/web/?hl=en,
+16,Number of Unique Previews,Google Analytics,Total number of unique previews of resources by period.,https://www.google.com/analytics/web/?hl=en,
+17,Number of Unique Shares,Google Analytics,Total number of unique shares of resources by period.,https://www.google.com/analytics/web/?hl=en,
+18,Bounce Rate,Google Analytics,Bounce rate (define!).,https://www.google.com/analytics/web/?hl=en,
+19,Number of Twitter Followers,Twitter,Number of twitter accounts following @humdata.,https://twitter.com/humdata,daily
+20,Number of Twitter Following,Twitter,Number of twitter accounts being followed by @humdata.,https://twitter.com/humdata,daily

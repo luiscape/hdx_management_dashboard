@@ -8,7 +8,7 @@ library(reshape2)
 
 # ScraperWiki helper function
 onSw <- function(p = NULL, d = TRUE, l = 'tool/ckan/') {
-  if(d) return(paste0(p,l))
+  if(d) return(paste0(l,p))
   else return(p)
 }
 
@@ -21,7 +21,7 @@ source(onSw('code/sw_status.R'))
 ########################
 args <- commandArgs(T)
 limit = args[1]
-PATH = ""
+PATH = onSw("data/ckan_activity_data.csv")
 db_table_name = "ckan_activity_data"
 
 
@@ -39,7 +39,7 @@ fetchActivityData <- function(l = 25000) {
 
   # url to query
   url = paste0('https://data.hdx.rwlabs.org/api/action/recently_changed_packages_activity_list?limit=', l)
-  path = "data/activity_data.json"
+  path = onSw("data/activity_data.json")
   download.file(url, path, method = "wget")
   doc = fromJSON(file = path, unexpected.escape = "keep")
 
@@ -122,6 +122,7 @@ reshapeData <- function(df = NULL) {
   activity_data_totals <- data.frame(table(df$timestamp, df$activity_type))
   names(activity_data_totals) <- c('date', 'variable', 'frequency')
   out <- dcast(activity_data_totals, date ~ variable, value.var = "frequency")
+  names(out) <- c('date', 'changed', 'new', 'deleted')
   cat('----------------------------\n')
   return(out)
 }
@@ -146,7 +147,7 @@ runScraper <- function(csv = FALSE, p = NULL, table = NULL) {
   # and then proceed to writting the data in the database.
   if (is.data.frame(activity_data_totals)) {
     writeTable(activity_data_totals, table, 'scraperwiki')
-    m <- paste('Data saved on database.', nrow(activity_data_totals), 'records added.\n')
+    m <- paste('\nData saved to database.', nrow(data), 'records added.\n')
     cat(m)
   }
   else print(activity_data_totals)
