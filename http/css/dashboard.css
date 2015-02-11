@@ -1,60 +1,115 @@
 /* Dashboard Styles */
 
 body.custom-background {
-	/*background-image: url('http://docs.hdx.rwlabs.org/wp-content/uploads/worldmap.png');*/
-	background-color: #ECF0F1;
-	background-repeat: no-repeat;
-	background-position: top center;
-	background-attachment: fixed;
+    /*background-image: url('http://docs.hdx.rwlabs.org/wp-content/uploads/worldmap.png');*/
+    
+    background-color: #ECF0F1;
+    background-repeat: no-repeat;
+    background-position: top center;
+    background-attachment: fixed;
 }
-.archive div#main,
-.blog div#main-container {
-	float: none;
-	padding-top: 100px;
-	padding-left: 100px;
-	padding-bottom: 100px;
-	padding-right: 100px;
-	background-color: #ECF0F1;
+.archive div#main, .blog div#main-container {
+    float: none;
+    padding-top: 100px;
+    padding-left: 100px;
+    padding-bottom: 100px;
+    padding-right: 100px;
+    background-color: #ECF0F1;
 }
-a.more-link,
-.entry-content a.more-link {
-	background-color: #808080;
+a.more-link, .entry-content a.more-link {
+    background-color: #808080;
 }
-
 /* Charts */
+
 .c3-line {
-  stroke-width: 2px;
+    stroke-width: 2px;
 }
-
 #n_datasets .c3-legend-item {
-font-size: 11px;
+    font-size: 11px;
 }
-
 #topchart .c3-legend-item {
-	font-size: 11px;
-	padding-top: 100px;
+    font-size: 11px;
+    padding-top: 100px;
 }
 #topchart .c3-line {
-  stroke-width: 2px;
+    stroke-width: 2px;
 }
-
 /* grid */
+
 .gridster ul li {
-	background-color: #fff;
-	/*border: 1px solid;*/
-	/*border-radius: 1px;;*/
-	/*border-color: #ccc;*/
-	list-style-type: none;
-	padding: 20px 20px 20px 20px;
-	padding-top: 20px;
-	font-size: 40px;
-	font-weight: bold;
-	line-height: 60px;
+    background-color: #fff;
+    /*border: 1px solid;*/
+    /*border-radius: 1px;;*/
+    /*border-color: #ccc;*/
+    
+    list-style-type: none;
+    padding: 20px 20px 20px 20px;
+    padding-top: 20px;
+    font-size: 40px;
+    font-weight: bold;
+    line-height: 60px;
 }
-
 .gridster ul li p {
-	font-size: 10px;
-	line-height: 0px;
-	font-weight: 400;
+    font-size: 10px;
+    line-height: 0px;
+    font-weight: 400;
+}
+/* imported from another CSS for making the tile */
 
+.tile {
+    position: relative;
+    padding: 14px;
+    margin-bottom: 20px;
+    text-align: center;
+    background-color: #eff0f2;
+    border-radius: 6px;
+}
+.tile .tile-hot-ribbon {
+    position: absolute;
+    top: -4px;
+    right: -4px;
+    display: block;
+    width: 82px;
+}
+.tile p {
+    margin-bottom: 33px;
+    font-size: 15px;
+}
+.tile-image {
+    height: 100px;
+    margin: 31px 0 27px;
+    vertical-align: bottom;
+}
+.tile-image.big-illustration {
+    width: 112px;
+    height: 111px;
+    margin-top: 20px;
+}
+.tile-title {
+    margin: 0;
+    font-size: 20px;
+}
+.progress {
+    height: 12px;
+    background: #ebedef;
+    border-radius: 32px;
+    box-shadow: none;
+}
+.progress-bar {
+	height: 12px;
+    background: #1abc9c;
+    border-radius: 32px;
+    box-shadow: none;
+}
+.progress-bar-success {
+    background-color: #2ecc71;
+}
+.progress-bar-warning {
+    background-color: #f1c40f;
+}
+.progress-bar-danger {
+    background-color: #e74c3c;
+}
+.progress-bar-info {
+    background-color: #3498db;
 }

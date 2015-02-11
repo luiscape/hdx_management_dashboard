@@ -80,6 +80,23 @@
                             <li data-row="1" data-col="1" data-sizex="1" data-sizey="1" id="twitter_following"></li>
 
                             <li data-row="1" data-col="1" data-sizex="2" data-sizey="1"><div id="new_datasets_spark"></div></li>
+
+                            <li data-row="1" data-col="1" data-sizex="4" data-sizey="1">
+                            <!-- Progress bar container -->
+                              <div class="col-xs-12 col-md-6 col-centered">
+                                <div class='tile tile-hot' style="margin-top:20px; padding-bottom:0px; background-color:#fff;">
+                                  <!-- description of collection status -->
+                                  <p style="font-size:15px;">
+                                    We have reviewed <span id="capProgressFigure"></span> CAP documents.
+                                    We are around <span id="capProgressFigurePercentage"></span> done.
+                                  </p>
+
+                                  <!-- progress bar -->
+                                  <div id="capProgressBar" class='progress'></div>
+                    <!-- <div style="font-size: 12px;">(Progress bar has a short delay. Please don't worry. All your contributions are being recorded.)</div> -->
+                                </div>
+                              </div>
+                              </li>
                         </ul>
                     </div>
 
@@ -103,5 +120,6 @@
 <script type='text/javascript' src='/js/topchart.js'></script>
 <script type='text/javascript' src='/js/share_org.js'></script>
 <script type='text/javascript' src='/js/sparklines.js'></script>
+<script type='text/javascript' src='/js/progress-bar.js'></script>
 
 </html>
