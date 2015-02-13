@@ -11,8 +11,6 @@
     <link href='http://fonts.googleapis.com/css?family=Open+Sans:300' rel='stylesheet' type='text/css'>
     <!--[if lt IE 9]><script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
 
-    <!-- add this when on ScraperWiki: /dnv1xak/6gemw2mellxy2t1/http -->
-
     <!-- Loading C3 + D3 JavaScript -->
     <script src="/js/vendor/d3.min.js"></script>
     <script src='/js/vendor/c3.min.js'></script>
@@ -20,7 +18,6 @@
 
     <!-- Loading jquery and child dependencies -->
     <script type='text/javascript' src='/js/vendor/jquery.min.js'></script>
-    <!-- <script type='text/javascript' src='/js/vendor/jquery-migrate.min.js'></script> -->
     <script type='text/javascript' src='/js/vendor/jsonpath.js'></script>
     <script type="text/javascript" src="/js/vendor/jquery.gridster.min.js"></script>
     <script type="text/javascript" src="/js/vendor/data_collection.js"></script>
@@ -33,16 +30,14 @@
 
     <!-- Custom CSS -->
     <link rel='stylesheet' id='dashboard-styles' href='/css/dashboard.css' type='text/css' media='all' />
-
     <link rel='stylesheet' id='gridster-css' src="/css/vendor/jquery.gridster.min.css"></link>
 
 </head>
 
 <body class="archive category category-blog category-12 custom-background chrome group-blog">
     <section id='main-container' class="BlogFrontPage clear animated BeanFadeIn">
-        <div id="main" role="main">
             <!-- Top navigation panel -->
-            <div class="row" style="padding-bottom: 40px;">
+            <div class="row" style="padding-bottom: 40px;" >
                 <div class="twelve columns">
                     <div class="eight columns left">
                         <h1>HDX Statistics</h1>
@@ -66,49 +61,46 @@
                         <div id="topchart"></div>
                     </div>
                 </div>
-                <div style: "padding-bottom:20px;">
-                </div>
+                <div style: "padding-bottom:20px;"></div>
 
                 <hr />
+            </div>
 
-                <!-- Grid area -->
-                <div class="row" style="padding-left:30px;">
-                    <div class="gridster">
-                        <ul>
-                            <li data-row="1" data-col="1" data-sizex="1" data-sizey="1" id="shareorgs"></li>
-                            <li data-row="1" data-col="1" data-sizex="1" data-sizey="1" id="twitter_followers"></li>
-                            <li data-row="1" data-col="1" data-sizex="1" data-sizey="1" id="twitter_following"></li>
+            <!-- Grid area -->
+            <div style="padding-left:30px;">
+                <div class="gridster">
+                    <ul>
+                        <li data-row="1" data-col="1" data-sizex="1" data-sizey="1" id="shareorgs"></li>
+                        <li data-row="1" data-col="2" data-sizex="1" data-sizey="1" id="twitter_followers"></li>
+                        <li data-row="1" data-col="3" data-sizex="1" data-sizey="1" id="twitter_following"></li>
+                        <li data-row="2" data-col="1" data-sizex="2" data-sizey="1">
+                            <div id="new_datasets_spark"></div>
+                        </li>
 
-                            <li data-row="1" data-col="1" data-sizex="2" data-sizey="1"><div id="new_datasets_spark"></div></li>
-
-                            <li data-row="1" data-col="1" data-sizex="4" data-sizey="1">
+                        <li data-row="1" data-col="1" data-sizex="4" data-sizey="1">
                             <!-- Progress bar container -->
-                              <div class="col-xs-12 col-md-6 col-centered">
+                            <div class="col-xs-12 col-md-6 col-centered">
                                 <div class='tile tile-hot' style="margin-top:20px; padding-bottom:0px; background-color:#fff;">
-                                  <!-- description of collection status -->
-                                  <p style="font-size:15px;">
-                                    We have reviewed <span id="capProgressFigure"></span> CAP documents.
-                                    We are around <span id="capProgressFigurePercentage"></span> done.
-                                  </p>
+                                    <!-- description of collection status -->
+                                    <p style="font-size:15px;">
+                                        We have reviewed <span id="capProgressFigure"></span> CAP documents. We are around <span id="capProgressFigurePercentage"></span> done.
+                                    </p>
 
-                                  <!-- progress bar -->
-                                  <div id="capProgressBar" class='progress'></div>
-                    <!-- <div style="font-size: 12px;">(Progress bar has a short delay. Please don't worry. All your contributions are being recorded.)</div> -->
+                                    <!-- progress bar -->
+                                    <div id="capProgressBar" class='progress'></div>
                                 </div>
-                              </div>
-                              </li>
-                        </ul>
-                    </div>
-
+                            </div>
+                        </li>
+                    </ul>
                 </div>
-
-                <footer>
-                    <div class="row">
-                        <p style="font-size:12px;">Developed by HDX's Data Team.</p>
-                    </div>
-                </footer>
             </div>
     </section>
+    <footer>
+        <div class="row">
+            <p style="font-size:12px;">Developed by HDX's Data Team.</p>
+        </div>
+    </footer>
+
 </body>
 
 <!-- Loading visualization scripts -->

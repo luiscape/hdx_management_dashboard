@@ -19,8 +19,8 @@ body.custom-background {
 a.more-link, .entry-content a.more-link {
     background-color: #808080;
 }
-/* Charts */
 
+/* Charts */
 .c3-line {
     stroke-width: 2px;
 }
@@ -36,12 +36,23 @@ a.more-link, .entry-content a.more-link {
 }
 /* grid */
 
+ul {
+    list-style-type: none;
+}
+
+.gridster {
+    /*margin: 0 auto;*/
+    -webkit-transition: opacity .6s;
+    -moz-transition: opacity .6s;
+    -o-transition: opacity .6s;
+    -ms-transition: opacity .6s;
+    transition: opacity .6s;
+}
 .gridster ul li {
     background-color: #fff;
     /*border: 1px solid;*/
     /*border-radius: 1px;;*/
     /*border-color: #ccc;*/
-    
     list-style-type: none;
     padding: 20px 20px 20px 20px;
     padding-top: 20px;
@@ -54,6 +65,14 @@ a.more-link, .entry-content a.more-link {
     line-height: 0px;
     font-weight: 400;
 }
+.gridster .gs-w {
+    cursor: pointer;
+}
+.gridster .preview-holder {
+    border: none!important;
+    background: #ccc!important;
+}
+
 /* imported from another CSS for making the tile */
 
 .tile {
