@@ -7,3 +7,5 @@ mailchimp/code/auth.R
 .httr-oauth
 7c6jufm/*
 7c6jufm/**
+twitter/code/auth/*
+twitter/code/auth/**
