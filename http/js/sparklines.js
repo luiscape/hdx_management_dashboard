@@ -18,8 +18,15 @@ function generateSparkline(table_name, column_name, div_id, verbose) {
     // filtering the data
     var data, values, dates, ind_data;
     data = new DataCollection(json);
-    values = data.query().filter({ new__lt: 40 }).values(column_name);
-    dates = data.query().filter({ new__lt: 40 }).values('date');
+
+    if (column_name == "new") {
+      values = data.query().filter({ new__lt: 100 }).values(column_name);
+      dates = data.query().filter({ new__lt: 100 }).values('date');
+    }
+    if (column_name == "changed") {
+      values = data.query().filter({ changed__lt: 100 }).values(column_name);
+      dates = data.query().filter({ changed__lt: 100 }).values('date');
+    }
 
     // converting strings to date objects
     var format = d3.time.format("%Y-%m-%d");
@@ -53,6 +60,7 @@ function generateSparkline(table_name, column_name, div_id, verbose) {
       legend: {
         show: false
       },
+      color: { pattern: [ "#ffffff" ] },
       size: {
           height: 100
       },
@@ -80,4 +88,5 @@ function generateSparkline(table_name, column_name, div_id, verbose) {
 // from a resource independently.
 // this causes a performance issue,
 // but demonstrates how each call can be made independendtly.
-generateSparkline('ckan_activity_data', 'new', '#new_datasets_spark', true);
+generateSparkline('ckan_activity_data', 'new', '#new_datasets_spark', false);
+generateSparkline('ckan_activity_data', 'changed', '#edit_datasets_spark', false);

@@ -71,10 +71,17 @@
                 <div class="gridster">
                     <ul>
                         <li data-row="1" data-col="1" data-sizex="1" data-sizey="1" id="shareorgs"></li>
+                        <li data-row="1" data-col="1" data-sizex="1" data-sizey="1" id="datasetsorgs"></li>
                         <li data-row="1" data-col="2" data-sizex="1" data-sizey="1" id="twitter_followers"></li>
                         <li data-row="1" data-col="3" data-sizex="1" data-sizey="1" id="twitter_following"></li>
-                        <li data-row="2" data-col="1" data-sizex="2" data-sizey="1">
+
+                        <li data-row="2" data-col="1" data-sizex="2" data-sizey="1" class="tileOrange">
+                            <p>PULSE: Dataset creations</p>
                             <div id="new_datasets_spark"></div>
+                        </li>
+                        <li data-row="2" data-col="1" data-sizex="2" data-sizey="1" class="tileBlue">
+                            <p>PULSE: Dataset edits</p>
+                            <div id="edit_datasets_spark"></div>
                         </li>
 
                         <li data-row="1" data-col="1" data-sizex="4" data-sizey="1">
@@ -91,6 +98,7 @@
                                 </div>
                             </div>
                         </li>
+
                     </ul>
                 </div>
             </div>
@@ -110,7 +118,7 @@
 <!-- Loading data -->
 <script type='text/javascript' src='/js/latestfigures.js'></script>
 <script type='text/javascript' src='/js/topchart.js'></script>
-<script type='text/javascript' src='/js/share_org.js'></script>
+<script type='text/javascript' src='/js/shares.js'></script>
 <script type='text/javascript' src='/js/sparklines.js'></script>
 <script type='text/javascript' src='/js/progress-bar.js'></script>
 

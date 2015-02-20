@@ -2,7 +2,6 @@
 
 body.custom-background {
     /*background-image: url('http://docs.hdx.rwlabs.org/wp-content/uploads/worldmap.png');*/
-    
     background-color: #ECF0F1;
     background-repeat: no-repeat;
     background-position: top center;
@@ -51,7 +50,7 @@ ul {
 .gridster ul li {
     background-color: #fff;
     /*border: 1px solid;*/
-    /*border-radius: 1px;;*/
+    border-radius: 5px;
     /*border-color: #ccc;*/
     list-style-type: none;
     padding: 20px 20px 20px 20px;
@@ -131,4 +130,17 @@ ul {
 }
 .progress-bar-info {
     background-color: #3498db;
+}
+
+.tileBlue {
+    background-color: #3498db!important;
+}
+.tileOrange {
+    background-color: #f39c12!important;
+}
+.tileOrange p {
+    color: #fff!important;
+}
+.tileBlue p {
+    color: #fff!important;
 }
