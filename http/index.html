@@ -37,7 +37,7 @@
 <body class="archive category category-blog category-12 custom-background chrome group-blog">
     <section id='main-container' class="BlogFrontPage clear animated BeanFadeIn">
             <!-- Top navigation panel -->
-            <div class="row" style="padding-bottom: 40px;" >
+            <div class="row" style="padding-bottom: 40px;padding-top:100px;" >
                 <div class="twelve columns">
                     <div class="eight columns left">
                         <h1>HDX Statistics</h1>
@@ -103,12 +103,21 @@
                 </div>
             </div>
     </section>
+    <hr />
+
+    <section class="row">
+    <div class="" id="weather-forecast-graphic">
+        Week's forecast.
+        <i><span id="weather-forecast-summary"></span></i>
+    </div>
+    </section>
+    <hr />
     <footer>
         <div class="row">
             <p style="font-size:12px;">Developed by HDX's Data Team.</p>
         </div>
-    </footer>
 
+    </footer>
 </body>
 
 <!-- Loading visualization scripts -->
@@ -121,5 +130,6 @@
 <script type='text/javascript' src='/js/shares.js'></script>
 <script type='text/javascript' src='/js/sparklines.js'></script>
 <script type='text/javascript' src='/js/progress-bar.js'></script>
+<script type="text/javascript" src='/js/weather-forecast.js'></script>
 
 </html>
