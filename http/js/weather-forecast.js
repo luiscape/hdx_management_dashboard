@@ -4,25 +4,25 @@ function graphForecast(key, div_id,verbose) {
         url: url,
         dataType: "jsonp",
         success: function(json) {
-            $("#weather-forecast-summary").text(json["hourly"]["summary"]);
+            $("#weather-forecast-summary").text(json["daily"]["summary"]);
 
             // fixing Epoch
-            json["hourly"]["data"].forEach(function(d) {
+            json["daily"]["data"].forEach(function(d) {
                 d.time = new Date(d.time * 1000);
             });
 
             // Filter data.
             var data, values, date_time, ind_data;
-            data = new DataCollection(json["hourly"]["data"]);
+            data = new DataCollection(json["daily"]["data"]);
 
-            values = data.query().values("apparentTemperature");
+            values_min = data.query().values("apparentTemperatureMin");
+            values_max = data.query().values("apparentTemperatureMax");
             date_time = data.query().values("time");
-            console.log(values);
-
 
             chart_data = {
                 date: date_time,
-                value: values
+                temperature_min: values_min,
+                temperature_max: values_max
             };
             if (verbose) console.log(chart_data);
 
@@ -33,7 +33,7 @@ function graphForecast(key, div_id,verbose) {
                     x: 'date',
                     x_format: '%Y-%m-%dT%H:%M:%S',
                     json: chart_data,
-                    type: 'bar',
+                    type: 'area-spline',
                     labels: false,
                     selection: {
                         enabled: false,
@@ -48,7 +48,7 @@ function graphForecast(key, div_id,verbose) {
                     show: false
                 },
                 color: {
-                    pattern: ["#1abc9c"]
+                    pattern: ["#1abc9c", "#c0392b"]
                 },
                 size: {
                     height: 100
